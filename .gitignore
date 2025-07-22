@@ -6,6 +6,7 @@ __pycache__/
 *.jsonl
 *.log
 .env
+*.csv
 
 # Conda
 install.ps1

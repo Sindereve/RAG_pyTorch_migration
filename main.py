@@ -44,6 +44,7 @@ result_code = clean_llm_code(result)
 LOGGER.info(f"Получен код из ответа")
 
 val = Validator()
-res, error = val.dynamic_val(result_code)
+res, error = val.dynamic_val(result_code, torch_version="2.7.0")
 LOGGER.info(f"Вывод от валидатора\nOut: {res}\nError: {error}")
 LOGGER.info("Happy end")
+

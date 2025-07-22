@@ -1,7 +1,9 @@
 import os
 import logging
+import re # для очистки кода
 from dotenv import load_dotenv
-from openai import OpenAI
+from openai import OpenAI, APIConnectionError, OpenAIError
+from tenacity import retry, stop_after_attempt, wait_exponential, retry_if_exception_type
 
 load_dotenv()
 
@@ -10,16 +12,28 @@ LOGGER = logging.getLogger(__name__)
 CLIENT = OpenAI(
     base_url="https://openrouter.ai/api/v1",
     api_key=os.getenv('OPENROUTER_API'),
+    timeout=30,
 )
 
-def get_llm_response(prompt: str, model_name:str = "moonshotai/kimi-k2:free")-> str:
-    completion = CLIENT.chat.completions.create(
-        model=model_name,
-        messages=[{"role": "user", "content": prompt}]
-    )
-    return completion.choices[0].message.content
 
-import re  
+@retry(
+    retry=retry_if_exception_type(APIConnectionError), # Retry только для connection ошибок
+    stop=stop_after_attempt(5),  # 5 попыток
+    wait=wait_exponential(multiplier=1, min=2, max=30),  # ждать 2, 4, 8, 16, 30 сeк
+    reraise=True  # Перебросить оригинальную ошибку после retries
+)
+def get_llm_response(prompt: str, model_name: str = "deepseek/deepseek-chat:free")-> str:
+    try:
+        completion = CLIENT.chat.completions.create(
+            model=model_name,
+            messages=[{"role": "user", "content": prompt}]
+        )
+        return completion.choices[0].message.content  
+    except OpenAIError as e:
+        if getattr(e, 'code') == 429:
+            raise OpenAIError('Rate limit!!!')
+        raise
+    
 
 def clean_llm_code(raw_output):
     """

@@ -32,6 +32,10 @@ loggers:
     level: DEBUG
     handlers: [console, file]
     propagate: no
+  validator:
+    level: DEBUG
+    handlers: [console, file]
+    propagate: no
 
 root:
   level: WARNING
