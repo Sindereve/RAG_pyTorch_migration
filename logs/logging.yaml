@@ -26,15 +26,15 @@ loggers:
     propagate: False
   parsing:                 
     level: DEBUG
-    handlers: [console, file]
+    handlers: [file]
     propagate: no
   retrival:
     level: DEBUG
-    handlers: [console, file]
+    handlers: [file]
     propagate: no
   validator:
     level: DEBUG
-    handlers: [console, file]
+    handlers: [file]
     propagate: no
 
 root:

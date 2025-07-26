@@ -4,6 +4,7 @@ __pycache__/
 
 # Data
 *.jsonl
+*.json
 *.log
 .env
 *.csv
