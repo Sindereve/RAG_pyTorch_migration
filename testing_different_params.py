@@ -19,9 +19,11 @@ LOGGER.debug(f"\ntime init library: {time.time() - start} sec\n{'-'*30}")
 
 LOGGER.info("Старт проекта")
 
-model_names = ["sentence-transformers/all-MiniLM-L6-v2", 
-                 "BAAI/bge-base-en", 
-                 "BAAI/bge-large-en", 
+# "sentence-transformers/all-MiniLM-L6-v2", 
+#                  "BAAI/bge-base-en", 
+#                  "BAAI/bge-large-en", 
+
+model_names = [
                  "intfloat/e5-large", 
                  "sentence-transformers/LaBSE"
 ]
@@ -57,29 +59,33 @@ for model_name in model_names:
 
 
     info_list = []
+    try:
+        number_test = 0
+        for name, old_code in testing_data.items():
+            number_test+=1
+            LOGGER.info(f"[Start] Test {number_test}")
+            LOGGER.info(f"- Запрос в БД")
+            prompt = rtr.build_prompt(old_code)
 
-    number_test = 0
-    for name, old_code in testing_data.items():
-        number_test+=1
-        LOGGER.info(f"[Start] Test {number_test}")
-        LOGGER.info(f"- Запрос в БД")
-        prompt = rtr.build_prompt(old_code)
+            LOGGER.info(f"- Запрос в LLM")
+            result = get_llm_response(prompt, LLM_NAME)
 
-        LOGGER.info(f"- Запрос в LLM")
-        result = get_llm_response(prompt, LLM_NAME)
+            LOGGER.info(f"- Очистка ответа LLM")
+            new_code = clean_llm_code(result)
 
-        LOGGER.info(f"- Очистка ответа LLM")
-        new_code = clean_llm_code(result)
+            LOGGER.info(f"- Валидация")
+            info_dict, _ = val.run_test_old_and_new_code(name, old_code, new_code)
+            info_list.append(info_dict)
+            LOGGER.info(f"[End] Test {number_test}")
+        
+        dfTest = pd.DataFrame(info_list)
+        dfTest.to_csv(f"data/{model.model_name.replace('/', '_')}.csv")
+        LOGGER.info(f"Файл с результатами сохранён в data/{model.model_name.replace('/', '_')}.csv")
 
-        LOGGER.info(f"- Валидация")
-        info_dict, _ = val.run_test_old_and_new_code(name, old_code, new_code)
-        info_list.append(info_dict)
-        LOGGER.info(f"[End] Test {number_test}")
-
-    
-    dfTest = pd.DataFrame(info_list)
-    dfTest.to_csv(f"data/{model.model_name.replace('/', '_')}.csv")
-    LOGGER.info(f"Файл с результатами сохранён в data/{model.model_name.replace('/', '_')}.csv")
+    except Exception as e:
+        dfTest = pd.DataFrame(info_list)
+        dfTest.to_csv(f"data/{model.model_name.replace('/', '_')}.csv")
+        LOGGER.info(f"Файл с результатами сохранён в data/{model.model_name.replace('/', '_')}.csv")
 
 
 LOGGER.info("Happy end")
