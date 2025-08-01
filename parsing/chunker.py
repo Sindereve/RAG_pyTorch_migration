@@ -13,7 +13,7 @@ LOGGER.debug(f"time init library: {time.time() - start} sec")
 start = time.time()
 LOGGER.debug(f"start init code")
 
-def _split_text(text: str, tokenizer, 
+def _recursive_character_text_splitter(text: str, tokenizer, 
                  chunk_size: int, overlap: int, log: bool = False) -> List[str]:
     safe_len = tokenizer.model_max_length - 2
 
@@ -63,7 +63,7 @@ def chunk_jsonl(input_path: str, output_path: str,
                 continue
 
             for idx, chunk in enumerate(
-                _split_text(body, tokenizer, chunk_size=chunk_size, overlap=overlap)
+                _recursive_character_text_splitter(body, tokenizer, chunk_size=chunk_size, overlap=overlap)
             ):
                 chunk_entry = {
                     "version": tag,
@@ -76,6 +76,7 @@ def chunk_jsonl(input_path: str, output_path: str,
                 outfile.write("\n")
                 
                 saved += 1
+
     LOGGER.debug(f"Сохранено {saved} чанков -> {out_path}")
     return None
 

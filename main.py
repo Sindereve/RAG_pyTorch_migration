@@ -12,7 +12,7 @@ from parsing import prepare
 from retrival import Retreiver, get_embedding_core
 from llm import get_llm_response, clean_llm_code
 from validator import Validator
-LLM_NAME = "tngtech/deepseek-r1t2-chimera"
+LLM_NAME = "deepseek/deepseek-chat-v3-0324"
 
 LOGGER.debug(f"\ntime init library: {time.time() - start} sec\n{'-'*30}")
 

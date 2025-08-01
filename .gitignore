@@ -1,6 +1,8 @@
 # Python
 __pycache__/
 .pytest_cache/
+cach_test.py
+cach_test.ipynb
 
 # Data
 *.jsonl

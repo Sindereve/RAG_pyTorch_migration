@@ -57,9 +57,11 @@ class Retreiver():
     
     def build_prompt(self, old_code:str) -> str:
         context_docs = self._get_retriever_for_langChain(k=6).invoke(old_code)
+        LOGGER.debug('Получен ответ от БД')
         context_text = "\n\n---\n\n\n".join(doc.page_content 
                                             for doc in context_docs)
         prompt = b_m(old_code, context_text)
+        LOGGER.debug('Промт создан')
         return prompt
 
     # Методы для очистки
