@@ -1,12 +1,13 @@
 # RAG_pyTorch_migration
 
-Проект Retrieval-Augmented Generation [(RAG)](https://habr.com/ru/articles/779526/) для миграции кода с версии v1.0.0 PyTorch на v2.7.0. 
+Проект для миграции системы Retrieval-Augmented Generation (RAG) с PyTorch v1.0.0 на v2.7.0. RAG сочетает возможности поиска релевантных документов с генерацией текста, используя современные LLM и векторные базы данных. Подробнее о RAG можно прочитать в (статье на Хабре)[https://habr.com/ru/articles/779526/].
 
 ## Особенности 
 
-* langchain в связки с HuggingFaceEmbeddings
-* векторная БД QDrant
-* работа с API LLM через [openrouter](https://openrouter.ai/)
+* Интеграция LangChain в связки с HuggingFaceEmbeddings
+* Векторная база данных QDrant
+* Работа с API LLM через [openrouter](https://openrouter.ai/)
+* Миграция на PyTorch v2.7.0 получаем код от пользователя, выдаём новый код.
 
 ## Структура проекта
 ``` text
@@ -25,3 +26,11 @@ RAG_pyTorch_migration/
 ├── testing_differen_params.py  # Блок для тестирования
 └── README.md  
 ```
+
+
+** Требования 
+
+* conda окружение torch100 - для валидации кода на версии 1.0.0
+* conda окружение torch270 - для валидации кода на версии 2.7.0
+* файл .env в корне проекта с OPENROUTER_API
+* база данных QDrant(по умолчанию подключается к локальному контейнеру с адресом `http://localhost:6333/`)
