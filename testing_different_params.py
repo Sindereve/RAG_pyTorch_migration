@@ -70,10 +70,10 @@ for model_name in model_names:
         result = get_llm_response(prompt, LLM_NAME)
 
         LOGGER.info(f"- Очистка ответа LLM")
-        new_code = clean_llm_code(result)
+        new_code, explanation = clean_llm_code(result)
 
         LOGGER.info(f"- Валидация")
-        info_dict, _ = val.run_test_old_and_new_code(name, old_code, new_code)
+        info_dict, _ = val.run_test_old_and_new_code(name, old_code, new_code, explanation)
         info_list.append(info_dict)
         LOGGER.info(f"[End] Test {number_test}")
         

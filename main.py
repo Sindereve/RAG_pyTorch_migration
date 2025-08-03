@@ -12,7 +12,8 @@ from parsing import prepare
 from retrival import Retreiver, get_embedding_core
 from llm import get_llm_response, clean_llm_code
 from validator import Validator
-LLM_NAME = "deepseek/deepseek-chat-v3-0324"
+
+LLM_NAME = "tngtech/deepseek-r1t2-chimera"
 
 LOGGER.debug(f"\ntime init library: {time.time() - start} sec\n{'-'*30}")
 
@@ -45,7 +46,7 @@ LOGGER.info(f"Запрос в БД успешно выполнен")
 result = get_llm_response(prompt, LLM_NAME)
 LOGGER.info(f"Запрос в LLM успешно выполнен")
 
-result_code = clean_llm_code(result)
+result_code, _ = clean_llm_code(result)
 LOGGER.info(f"Получен код из ответа")
 
 val = Validator()

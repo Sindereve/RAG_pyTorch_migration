@@ -20,7 +20,7 @@ LOGGER.debug(f"time init library: {time.time() - start} sec")
 
 class Validator():
 
-    def _dynamic_val(self, code, torch_version: str ='2.7.0', is_delet_temp:bool = False):
+    def dynamic_val(self, code, torch_version: str ='2.7.0', is_delet_temp:bool = False):
         with tempfile.NamedTemporaryFile(mode='w', suffix='.py', 
                                          delete=is_delet_temp, # NO AUTO DELETE !!
                                          encoding='utf-8') as temp_file:
@@ -70,11 +70,11 @@ class Validator():
         """
             Check works code on version env_version
         """
-        out, err = self._dynamic_val(code, torch_version=env_version, is_delet_temp=is_delet_temp)
+        out, err = self.dynamic_val(code, torch_version=env_version, is_delet_temp=is_delet_temp)
         works = (err == '')
         return works, out, err
     
-    def run_test_old_and_new_code(self, name_test, old_code, new_code, is_delet_temp: bool = False):
+    def run_test_old_and_new_code(self, name_test, old_code, new_code, explanation, is_delet_temp: bool = False):
         """
             Testing old and new code
         """
@@ -110,6 +110,7 @@ class Validator():
             'Is work in 2.7.0 (после RAG)': new_code_works, 
             'RAG Out 2.7.0': new_code_out,
             'RAG Err 2.7.0': new_code_err[:200], # Think need record errors some other way. In future will change.
+            'Explanation': explanation,
         }, {
         'old_code': old_code,
             'new_code': new_code
