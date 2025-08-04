@@ -4,11 +4,11 @@
 
 ## Особенности 
 
-* Интеграция LangChain в связки с HuggingFaceEmbeddings
-* Векторная база данных QDrant
+* Интеграция [LangChain](https://python.langchain.com/docs/introduction/) в связки с [HuggingFaceEmbeddings](https://huggingface.co/models)
+* Векторная база данных [QDrant](https://qdrant.tech/)
 * Работа с API LLM через [openrouter](https://openrouter.ai/)
 * Миграция на PyTorch v2.7.0 получаем код от пользователя, выдаём новый код.
-* Streamlit для создания UI
+* [Streamlit](https://docs.streamlit.io/) для создания UI
 
 ## Структура проекта
 ``` text
